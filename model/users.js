@@ -16,15 +16,15 @@ const UserModel = sequelize.define('Usuarios',
         telefone: DataTypes.STRING,
         email: DataTypes.STRING,
         apoiador: DataTypes.BOOLEAN,
-        doador: DataTypes.BOOLEAN
+        voluntario: DataTypes.BOOLEAN
     }
 
 )
 
-sequelize.sync({force: true})
+sequelize.sync({force: false})
 
 module.exports = {
-    save: async function(nome, cpf, idade, rua, cidade, telefone, email, apoiador, doador){
+    save: async function(nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario){
 
         const user = UserModel.create({
             nome:nome,
@@ -35,7 +35,7 @@ module.exports = {
             telefone:telefone,
             email:email,
             apoiador:apoiador,
-            doador:doador
+            voluntario:voluntario
         })
     }
 }
