@@ -1,9 +1,9 @@
-const {DataTypes} = require("sequelize")
+const { DataTypes } = require("sequelize")
 const sequelize = require("../helpers/bd")
 
-const UserModel = sequelize.define('Usuarios',
+const userModel = sequelize.define('Usuarios',
     {
-        id:{
+        id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
@@ -21,21 +21,49 @@ const UserModel = sequelize.define('Usuarios',
 
 )
 
-sequelize.sync({force: false})
+sequelize.sync({ force: false })
 
 module.exports = {
-    save: async function(nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario){
 
-        const user = UserModel.create({
-            nome:nome,
-            cpf:cpf,
-            idade:idade,
-            rua:rua,
-            cidade:cidade,
-            telefone:telefone,
-            email:email,
-            apoiador:apoiador,
-            voluntario:voluntario
+    list: async function () {
+        const user = await userModel.findAll();
+
+        return user;
+    },
+
+    save: async function (nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario) {
+
+        const user = userModel.create({
+            nome: nome,
+            cpf: cpf,
+            idade: idade,
+            rua: rua,
+            cidade: cidade,
+            telefone: telefone,
+            email: email,
+            apoiador: apoiador,
+            voluntario: voluntario
         })
+        return user;
+    },
+
+    update: async function (id, nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario) {
+        return await userModel.update({
+            nome: nome, cpf: cpf, idade: idade, rua: rua, cidade: cidade,
+            telefone: telefone, email: email, apoiador: apoiador, voluntario: voluntario
+        },
+            {
+                where: { id: id }
+            })
+    },
+
+    delete: async function(id){
+        const user = await userModel.findByPk(id)
+        return user.destroy();
+    },
+    
+    getById: async function(id){
+        return await userModel.findByPk(id);
     }
+
 }

@@ -2,17 +2,32 @@ var express = require('express')
 var router = express.Router();
 var userDAO = require('../model/users')
 
-// List
+// List all
 router.get('/', async (req, res) => {
-    res.json({status: true, msg: 'Deu bommm'})
+    let user = await userDAO.list();
+    res.json({status: true, msg: 'Usuarios cadastrados: ', user})
+})
+
+// List by id
+router.get('/:id', async (req, res) => {
+    try {
+        let user = await userDAO.getById(req.params.id)
+        if(user){
+            res.json({status: true, msg: 'Usuario encontrado', user})
+        } else {
+            res.json({status: false, msg: 'Usuario não encontrado.'})
+        }
+    } catch (error) {
+        res.status(500).json({status: false, msg: 'Erro ao buscar o usuario'})
+    }
 })
 
 // Save
 router.post('/save', async (req, res) => {
-    const {nome, cpf, idade, rua, cidade, telefone, email, apoiador, doador} = req.body;
+    const {nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario} = req.body;
 
     userDAO
-        .save(nome, cpf, idade, rua, cidade, telefone, email, apoiador, doador)
+        .save(nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario)
         .then((user) => {
             res.json({status: true, msg: "Usuario cadastrado com sucesso", user})
         })
@@ -20,6 +35,37 @@ router.post('/save', async (req, res) => {
             console.log(err)
             res.status(500).json({status: false, msg: "Usuario não cadastrado", err})
         })
+})
+
+// Update user
+router.put('/update/:id', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario} = req.body;
+
+        let [result] = await userDAO.update(id, nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario)
+        if(result){
+            res.json({status: true, msg: 'Usuário alterado com sucesso'})
+        } else {
+            res.json({status: false, msg: 'Erro ao alterar o usuario.'})
+        }
+    } catch (error) {
+        res.status(500).json({status: false, msg: 'Usuario não encontrado'})
+    }
+})
+
+// Delete user
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        let userId = await userDAO.delete(req.params.id)
+        if(userId){
+            res.json({status: true, msg: 'Usuário excluído com sucesso'})
+        } else {
+            res.json({status: false, msg: 'Erro ao excluir o usuario.'})
+        }
+    } catch (error) {
+        res.status(500).json({status: false, msg: 'Usuario não encontrado'})
+    }
 })
 
 module.exports = router;
