@@ -31,8 +31,9 @@ module.exports = {
             offset,
             limit
         });
+        const countUser = await userModel.count();
 
-        return user;
+        return { data: user, total: countUser };
     },
 
     save: async function (nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario) {
@@ -62,12 +63,12 @@ module.exports = {
             })
     },
 
-    delete: async function(id){
+    delete: async function (id) {
         const user = await userModel.findByPk(id)
         return user.destroy();
     },
-    
-    getById: async function(id){
+
+    getById: async function (id) {
         return await userModel.findByPk(id);
     },
 

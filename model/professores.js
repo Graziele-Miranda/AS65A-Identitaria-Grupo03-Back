@@ -33,8 +33,9 @@ module.exports = {
             offset,
             limit,
         });
+        const countProfessor = await professorModel.count();
 
-        return professor;
+        return { data: professor, total: countProfessor };
     },
 
     save: async function (nome, login, senha, cpf, idade, rua, cidade, telefone, email, curso, apoiador, voluntario) {
@@ -66,16 +67,16 @@ module.exports = {
             })
     },
 
-    delete: async function(id){
+    delete: async function (id) {
         const professor = await professorModel.findByPk(id)
         return professor.destroy();
     },
-    
-    getById: async function(id){
+
+    getById: async function (id) {
         return await professorModel.findByPk(id);
     },
 
-    consultaLogin: async function(login, senha) {
+    consultaLogin: async function (login, senha) {
         try {
             const professor = await professorModel.findAll({
                 where: {
@@ -104,7 +105,7 @@ module.exports = {
         }
     },
 
-    getProfByCurso: async function(curso) {
+    getProfByCurso: async function (curso) {
         try {
             const professor = await professorModel.findAll({
                 where: {

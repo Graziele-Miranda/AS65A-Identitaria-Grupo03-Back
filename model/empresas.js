@@ -30,14 +30,17 @@ module.exports = {
             limit,
         });
 
-        return empresa;
+        const countComapany = await empresaModel.count();
+
+
+        return { data: empresa, total: countComapany };
     },
 
     save: async function (nome, cnpj, rua, cidade, telefone, email, apoiador, voluntario) {
 
         const empresa = empresaModel.create({
             nome: nome,
-            cnpj:cnpj,
+            cnpj: cnpj,
             rua: rua,
             cidade: cidade,
             telefone: telefone,
@@ -51,7 +54,7 @@ module.exports = {
     update: async function (id, nome, cnpj, rua, cidade, telefone, email, apoiador, voluntario) {
         return await empresaModel.update({
             nome: nome,
-            cnpj:cnpj,
+            cnpj: cnpj,
             rua: rua,
             cidade: cidade,
             telefone: telefone,
@@ -64,12 +67,12 @@ module.exports = {
             })
     },
 
-    delete: async function(id){
+    delete: async function (id) {
         const empresa = await empresaModel.findByPk(id)
         return empresa.destroy();
     },
-    
-    getById: async function(id){
+
+    getById: async function (id) {
         return await empresaModel.findByPk(id);
     },
 
