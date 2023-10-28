@@ -4,7 +4,10 @@ var userDAO = require('../model/users')
 
 // List all
 router.get('/', async (req, res) => {
-    let user = await userDAO.list();
+
+    const page = parseInt(req.query.page);
+
+    let user = await userDAO.list(page);
     res.json({status: true, msg: 'Usuarios cadastrados: ', user})
 })
 
@@ -24,10 +27,10 @@ router.get('/:id', async (req, res) => {
 
 // Save
 router.post('/save', async (req, res) => {
-    const {nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario} = req.body;
+    const {nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario} = req.body;
 
     userDAO
-        .save(nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario)
+        .save(nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario)
         .then((user) => {
             res.json({status: true, msg: "Usuario cadastrado com sucesso", user})
         })
@@ -41,9 +44,9 @@ router.post('/save', async (req, res) => {
 router.put('/update/:id', async (req, res) => {
     try {
         const {id} = req.params;
-        const {nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario} = req.body;
+        const {nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario} = req.body;
 
-        let [result] = await userDAO.update(id, nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario)
+        let [result] = await userDAO.update(id, nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario)
         if(result){
             res.json({status: true, msg: 'Usuário alterado com sucesso'})
         } else {

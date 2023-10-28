@@ -15,23 +15,27 @@ const userModel = sequelize.define('Usuarios',
         cidade: DataTypes.STRING,
         telefone: DataTypes.STRING,
         email: DataTypes.STRING,
+        profissao: DataTypes.STRING,
         apoiador: DataTypes.BOOLEAN,
         voluntario: DataTypes.BOOLEAN
     }
 
 )
 
-sequelize.sync({ force: false })
-
 module.exports = {
 
-    list: async function () {
-        const user = await userModel.findAll();
+    list: async function (page) {
+        const limit = 10
+        const offset = (page - 1) * limit;
+        const user = await userModel.findAll({
+            offset,
+            limit
+        });
 
         return user;
     },
 
-    save: async function (nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario) {
+    save: async function (nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario) {
 
         const user = userModel.create({
             nome: nome,
@@ -41,16 +45,17 @@ module.exports = {
             cidade: cidade,
             telefone: telefone,
             email: email,
+            profissao: profissao,
             apoiador: apoiador,
             voluntario: voluntario
         })
         return user;
     },
 
-    update: async function (id, nome, cpf, idade, rua, cidade, telefone, email, apoiador, voluntario) {
+    update: async function (id, nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario) {
         return await userModel.update({
             nome: nome, cpf: cpf, idade: idade, rua: rua, cidade: cidade,
-            telefone: telefone, email: email, apoiador: apoiador, voluntario: voluntario
+            telefone: telefone, email: email, profissao: profissao, apoiador: apoiador, voluntario: voluntario
         },
             {
                 where: { id: id }
@@ -64,6 +69,8 @@ module.exports = {
     
     getById: async function(id){
         return await userModel.findByPk(id);
-    }
+    },
+
+    Model: userModel,
 
 }

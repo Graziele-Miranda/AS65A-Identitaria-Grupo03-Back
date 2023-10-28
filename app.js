@@ -7,8 +7,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var home = require('./routes/home')
+var userRoutes = require('./routes/userRoutes')
+var professorRoutes = require('./routes/professorRoutes')
+var empresasRoutes = require('./routes/empresaRoutes')
+var install = require('./helpers/installApi')
 
-app.use('/home', home)
+app.use('/install', install)
+app.use('/user', userRoutes)
+app.use('/professor', professorRoutes)
+app.use('/empresa', empresasRoutes)
+
 
 module.exports = app;
