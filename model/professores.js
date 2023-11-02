@@ -78,7 +78,7 @@ module.exports = {
 
     consultaLogin: async function (login, senha) {
         try {
-            const professor = await professorModel.findAll({
+            const professor = await professorModel.findOne({
                 where: {
                     login: login,
                     senha: senha

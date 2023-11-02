@@ -9,8 +9,8 @@ router.post('/login', async (req, res) => {
     const { login, senha } = req.body;
     let profCadastrado = await professorDAO.consultaLogin(login, senha);
 
-    if (profCadastrado.length > 0) {
-        res.json({ status: true, msg: "Login efetuado com sucesso" })
+    if (!!profCadastrado) {
+        res.json({ user: profCadastrado, status: true, msg: "Login efetuado com sucesso" })
     } else {
         res.status(403).json({ status: false, msg: 'Usuario/Senha invalidos' })
     }
