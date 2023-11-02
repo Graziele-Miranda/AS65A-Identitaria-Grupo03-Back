@@ -1,7 +1,7 @@
 var express = require('express')
 var router = express.Router();
 var empresaDAO = require('../model/empresas')
-
+const cnpjValidator = require('../validators/cnpjValidator');
 
 
 // List all
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Save
-router.post('/save', async (req, res) => {
+router.post('/save', cnpjValidator.validationRulesCNPJ, cnpjValidator.validateCNPJ, async (req, res) => {
     const {nome, cnpj, rua, cidade, telefone, email, apoiador, voluntario} = req.body;
 
     empresaDAO
@@ -43,7 +43,7 @@ router.post('/save', async (req, res) => {
 })
 
 // Update empresa
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', cnpjValidator.validationRulesCNPJ, cnpjValidator.validateCNPJ, async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, cnpj, rua, cidade, telefone, email, apoiador, voluntario} = req.body;

@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router();
 var userDAO = require('../model/users')
+const CPFValidation = require('../validators/cpfValidator')
 
 // List all
 router.get('/', async (req, res) => {
@@ -26,7 +27,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Save
-router.post('/save', async (req, res) => {
+router.post('/save', CPFValidation.validationRulesCPF, CPFValidation.validateCPF, async (req, res) => {
     const {nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario} = req.body;
 
     userDAO
@@ -41,7 +42,7 @@ router.post('/save', async (req, res) => {
 })
 
 // Update user
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', CPFValidation.validationRulesCPF, CPFValidation.validateCPF, async (req, res) => {
     try {
         const {id} = req.params;
         const {nome, cpf, idade, rua, cidade, telefone, email, profissao, apoiador, voluntario} = req.body;

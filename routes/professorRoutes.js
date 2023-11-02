@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router();
 var professorDAO = require('../model/professores')
+const CPFValidation = require("../validators/cpfValidator");
 
 
 // Login
@@ -54,7 +55,7 @@ router.post('/curso', async (req, res) => {
 })
 
 // Save
-router.post('/save', async (req, res) => {
+router.post('/save', CPFValidation.validationRulesCPF, CPFValidation.validateCPF, async (req, res) => {
     const { nome, login, senha, cpf, idade, rua, cidade, telefone, email, curso, apoiador, voluntario } = req.body;
 
     // Verificar se já existe um professor cadastrado no banco de dados com o mesmo login
@@ -75,7 +76,7 @@ router.post('/save', async (req, res) => {
 })
 
 // Update professor
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', CPFValidation.validationRulesCPF, CPFValidation.validateCPF, async (req, res) => {
     try {
         const { id } = req.params;
         const { nome, login, senha, cpf, idade, rua, cidade, telefone, email, curso, apoiador, voluntario } = req.body;
